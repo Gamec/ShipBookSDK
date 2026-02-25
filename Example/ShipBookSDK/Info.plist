@@ -37,6 +37,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>SHIPBOOK_URL</key>
+	<string>$(SHIPBOOK_URL)</string>
+	<key>SHIPBOOK_APP_ID</key>
+	<string>$(SHIPBOOK_APP_ID)</string>
+	<key>SHIPBOOK_APP_KEY</key>
+	<string>$(SHIPBOOK_APP_KEY)</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

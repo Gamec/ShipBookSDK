@@ -15,25 +15,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        ShipBook.enableInnerLog(enable: true)
-      #if swift(>=5.10)
+      // Override point for customization after application launch.
+      ShipBook.enableInnerLog(enable: true)
+      #if compiler(>=6.1)
+      print("Hello, Swift 6.1")
+      #elseif compiler(>=6.0)
+      print("Hello, Swift 6.0")
+      #elseif compiler(>=5.10)
       print("Hello, Swift 5.10")
-        
-      #elseif swift(>=5.9)
+      #elseif compiler(>=5.9)
       print("Hello, Swift 5.9")
-      
-      #elseif swift(>=5.8)
-      print("Hello, Swift 5.8")
-
-      #elseif swift(>=5.7)
-      print("Hello, Swift 5.7")
-
-      #elseif swift(>=5.0)
-      print("Hello, Swift 5.0")
+      #else
+      print("Hello, Swift 5.x")
       #endif
 
-      ShipBook.start(appId:"<your appId>", appKey: "<your appKey>")
+      let info = Bundle.main.infoDictionary!
+      let appId = info["SHIPBOOK_APP_ID"] as! String
+      let appKey = info["SHIPBOOK_APP_KEY"] as! String
+      if let url = info["SHIPBOOK_URL"] as? String, !url.isEmpty {
+          ShipBook.setConnectionUrl(url)
+      }
+      ShipBook.start(appId: appId, appKey: appKey)
       return true
     }
   
