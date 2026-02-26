@@ -43,7 +43,7 @@ class ConnectionClient {
   }
   static let shared = ConnectionClient()
   
-  static var BASE_URL = "https://api.shipbook.io/v1/"
+  static var BASE_URL = "https://api.shipbook.io/v2/"
   let dateFormatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"

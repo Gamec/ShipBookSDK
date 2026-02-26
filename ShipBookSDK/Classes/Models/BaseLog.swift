@@ -8,14 +8,14 @@
 
 import Foundation
 
-class BaseLog: Codable  {
+public class BaseLog: Codable  {
   static var dispatchQueue = DispatchQueue(label: "io.shipbook.counter")
   static var count: Int = 0
   
-  var time: Date
-  var orderId: Int
-  var threadInfo: ThreadInfo
-  var type: String
+  public var time: Date
+  public var orderId: Int
+  public var threadInfo: ThreadInfo
+  public var type: String
   
   init(type: String) {
     self.type = type
@@ -35,7 +35,7 @@ class BaseLog: Codable  {
     case type
   }
   
-  required init(from decoder: Decoder) throws {
+  public required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: BaseCodingKeys.self)
     let time = try container.decode(String.self, forKey: .time)
     self.time = try time.toDate()
@@ -44,7 +44,7 @@ class BaseLog: Codable  {
     self.type = try container.decode(String.self, forKey: .type)
   }
   
-  func encode(to encoder: Encoder) throws {
+  public func encode(to encoder: Encoder) throws {
     var container = encoder.container(keyedBy: BaseCodingKeys.self)
     try container.encode(time.toISO8601Format(), forKey: .time)
     try container.encode(orderId, forKey: .orderId)
@@ -54,11 +54,11 @@ class BaseLog: Codable  {
 
 }
 
-struct ThreadInfo: Codable {
-  var isMain: Bool
-  var queueLabel: String
-  var threadName: String
-  var threadId: UInt64
+public struct ThreadInfo: Codable {
+  public var isMain: Bool
+  public var queueLabel: String
+  public var threadName: String
+  public var threadId: UInt64
   init (){
     isMain = Thread.current.isMainThread
     queueLabel = DispatchQueue.currentLabel
@@ -68,7 +68,7 @@ struct ThreadInfo: Codable {
 }
 
 extension ThreadInfo: Equatable {}
-func ==(lhs: ThreadInfo, rhs: ThreadInfo) -> Bool {
+public func ==(lhs: ThreadInfo, rhs: ThreadInfo) -> Bool {
   return lhs.isMain == rhs.isMain &&
     lhs.queueLabel == rhs.queueLabel &&
     lhs.threadName == rhs.threadName &&
@@ -77,7 +77,7 @@ func ==(lhs: ThreadInfo, rhs: ThreadInfo) -> Bool {
 
 extension BaseLog: Equatable {}
 
-func ==(lhs: BaseLog, rhs: BaseLog) -> Bool {
+public func ==(lhs: BaseLog, rhs: BaseLog) -> Bool {
   return lhs.time.toISO8601Format() == rhs.time.toISO8601Format() &&
     lhs.threadInfo == rhs.threadInfo &&
     lhs.type == rhs.type

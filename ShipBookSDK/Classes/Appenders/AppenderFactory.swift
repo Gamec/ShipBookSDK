@@ -11,8 +11,17 @@ import Foundation
 struct AppenderFactory {
   struct FactoryError : Error {
   }
-  
+
+  private static var registry: [String: BaseAppender.Type] = [:]
+
+  static func register(type: String, appenderClass: BaseAppender.Type) {
+    registry[type] = appenderClass
+  }
+
   static func create(type: String, name: String, config: Config?) throws -> BaseAppender {
+    if let appenderType = registry[type] {
+      return appenderType.init(name: name, config: config)
+    }
     switch type {
     case "ConsoleAppender":
       return ConsoleAppender(name: name, config: config)
@@ -20,7 +29,7 @@ struct AppenderFactory {
 //      return OsLogAppender(name: name, config: config)
     case "SLCloudAppender", "SBCloudAppender": // SLCloudAppender for backward compatibility
       return SBCloudAppender(name: name, config: config)
-      
+
     default:
       throw FactoryError()
     }

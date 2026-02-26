@@ -130,11 +130,22 @@ public class ShipBook: NSObject {
   }
   
   /**
+    Register a custom appender type. Should be called before `start`.
+
+    - Parameters:
+      - type: The type name for the appender (used in server configuration).
+      - appenderClass: The appender type conforming to BaseAppender.
+  */
+  static public func registerAppender(type: String, appenderClass: BaseAppender.Type) {
+    AppenderFactory.register(type: type, appenderClass: appenderClass)
+  }
+
+  /**
     Entered in a new screen.
-   
+
     This will help you connect the logs to wich screen is open.
     The best practice is to add this code to viewWillAppear in the view controller.
-   
+
     - Parameter name: The name of the new screen.
   */
   @objc static public func screen(name: String) {

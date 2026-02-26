@@ -8,16 +8,16 @@
 
 import Foundation
 
-class Message: BaseLog {
-  var tag: String
-  var severity: Severity
-  var message: String
-  var function: String
-  var file: String
-  var line: Int
-  var callStackSymbols: [String]?
+public class Message: BaseLog {
+  public var tag: String
+  public var severity: Severity
+  public var message: String
+  public var function: String
+  public var file: String
+  public var line: Int
+  public var callStackSymbols: [String]?
 
-  init(message: String, severity: Severity, tag: String, function: String, file: String, line: Int, callStackSymbols: [String]? = nil) {
+  public init(message: String, severity: Severity, tag: String, function: String, file: String, line: Int, callStackSymbols: [String]? = nil) {
     self.message = message
     self.tag = tag
     self.severity = severity
@@ -38,7 +38,7 @@ class Message: BaseLog {
     case callStackSymbols
   }
   
-  required init(from decoder: Decoder) throws {
+  public required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.message = try container.decode(String.self, forKey: .message)
     self.tag = try container.decode(String.self, forKey: .tag)
@@ -50,7 +50,7 @@ class Message: BaseLog {
     try super.init(from: decoder)
   }
   
-  override func encode(to encoder: Encoder) throws {
+  public override func encode(to encoder: Encoder) throws {
     var container = encoder.container(keyedBy: CodingKeys.self)
     try container.encode(message, forKey: .message)
     try container.encode(tag, forKey: .tag)

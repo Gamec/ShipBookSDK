@@ -8,11 +8,11 @@
 
 import Foundation
 
-struct BinaryImage: Codable {
-  var startAddress: String
-  var name: String
-  var arch: String
-  var path: String
+public struct BinaryImage: Codable {
+  public var startAddress: String
+  public var name: String
+  public var arch: String
+  public var path: String
   init(startAddress: String, name: String, arch: String, path: String) {
     self.startAddress = startAddress
     self.name = name
@@ -21,15 +21,15 @@ struct BinaryImage: Codable {
   }
 }
 
-class Exception : BaseLog  {
-  var name: String
-  var reason: String? = nil
+public class Exception : BaseLog  {
+  public var name: String
+  public var reason: String? = nil
   //var userInfo: [AnyHashable : Any]?
-  var callStackSymbols: [String]?
-  var binaryImages: [BinaryImage]?
+  public var callStackSymbols: [String]?
+  public var binaryImages: [BinaryImage]?
 
   
-  init(name: String, reason: String? = nil, callStackSymbols: [String]? = nil, binaryImages: [BinaryImage]? = nil) {
+  public init(name: String, reason: String? = nil, callStackSymbols: [String]? = nil, binaryImages: [BinaryImage]? = nil) {
     self.name = name
     self.reason = reason
 //    self.threadInfo = ThreadInfo()
@@ -45,7 +45,7 @@ class Exception : BaseLog  {
     case binaryImages
   }
   
-  required init(from decoder: Decoder) throws {
+  public required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.name = try container.decode(String.self, forKey: .name)
     self.reason = try container.decodeIfPresent(String.self, forKey: .reason)
@@ -54,7 +54,7 @@ class Exception : BaseLog  {
     try super.init(from: decoder)
   }
   
-  override func encode(to encoder: Encoder) throws {
+  public override func encode(to encoder: Encoder) throws {
     var container = encoder.container(keyedBy: CodingKeys.self)
     try container.encode(name, forKey: .name)
     try container.encodeIfPresent(reason, forKey: .reason)

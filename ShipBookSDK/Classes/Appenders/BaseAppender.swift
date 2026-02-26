@@ -7,18 +7,18 @@
 //
 
 import Foundation
-typealias Config = [String: Any]
-protocol BaseAppender {
+public typealias Config = [String: Any]
+public protocol BaseAppender {
   var name: String { get }
-  
+
   init(name: String, config: Config?)
-  
+
   func update(config: Config?)
-  
+
   func push(log: BaseLog)
-  
+
   func flush()
-  
+
   func saveCrash(exception: Exception)
 }
 
