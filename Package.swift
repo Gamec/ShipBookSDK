@@ -23,11 +23,11 @@ let package = Package(
             dependencies: [],
             path: "ShipBookSDK/Classes"
           ),
-//        .testTarget(
-//            name: "ShipBookSDKTests",
-//            dependencies: ["ShipBookSDK"],
-//            path: "Example/Tests"
-//          ),
+        .testTarget(
+            name: "ShipBookSDKTests",
+            dependencies: ["ShipBookSDK"],
+            path: "Tests"
+          ),
     ],
     swiftLanguageVersions: [.v5]
 )

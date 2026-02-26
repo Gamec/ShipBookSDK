@@ -131,10 +131,18 @@ class LogManagerTests: XCTestCase {
     
     LogManager.shared.add(appender: test, name: "test")
     LogManager.shared.add(module: "", severity: .Info, callStackSeverity: .Error, appender: "test")
+    
+    // Wait for async operations to complete before creating the Log instance
+    let setupExp = expectation(description: "wait for logger setup")
+    DispatchQueue.shipBook.async {
+      setupExp.fulfill()
+    }
+    wait(for: [setupExp], timeout: 1)
+    
     let log = Log("test")
     log.d("shouldn't do anything")
     log.e(msg)
-    waitForExpectations(timeout: 10, handler: nil)
+    wait(for: [expect], timeout: 10)
   }
   
   func testConfigChange() {

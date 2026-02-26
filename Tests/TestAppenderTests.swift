@@ -68,7 +68,7 @@ class TestAppenderTests: XCTestCase {
       let msg = self.testAppender.messages[0]
       XCTAssertEqual(msg.message, "test error message")
       XCTAssertEqual(msg.severity, .Error)
-      XCTAssertEqual(msg.tag, "TestTag")
+      XCTAssertEqual(msg.tag, "xctest.TestTag")
       exp.fulfill()
     }
     waitForExpectations(timeout: 1, handler: nil)
@@ -131,8 +131,8 @@ class TestAppenderTests: XCTestCase {
     let exp1 = expectation(description: "setup-routing")
     LogManager.shared.add(appender: uiAppender, name: "ui")
     LogManager.shared.add(appender: dataAppender, name: "data")
-    LogManager.shared.add(module: "UI", severity: .Verbose, callStackSeverity: .Off, appender: "ui")
-    LogManager.shared.add(module: "Data", severity: .Verbose, callStackSeverity: .Off, appender: "data")
+    LogManager.shared.add(module: "xctest.UI", severity: .Verbose, callStackSeverity: .Off, appender: "ui")
+    LogManager.shared.add(module: "xctest.Data", severity: .Verbose, callStackSeverity: .Off, appender: "data")
     DispatchQueue.shipBook.async {
       exp1.fulfill()
     }
