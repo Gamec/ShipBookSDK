@@ -27,7 +27,6 @@ struct Login : Codable {
   let appVersion: String
   let appBuild: String
   let sdkVersion: String
-  let sdkBuild: String
   let manufacturer: String = "apple"
   let deviceName: String
   let deviceModel: String
@@ -47,8 +46,7 @@ struct Login : Codable {
     osVersion = UIDevice.current.systemVersion
     appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     appBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
-    sdkVersion = sdkBundle.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-    sdkBuild = sdkBundle.infoDictionary?["CFBundleVersion"] as? String ?? ""
+    sdkVersion = shipBookSDKVersion
     deviceName = UIDevice.current.name
     deviceModel = UIDevice.current.modelName
     language = "\(Locale.current.languageCode ?? "")-\(Locale.current.regionCode ?? "")"
@@ -71,7 +69,6 @@ struct Login : Codable {
     case appVersion
     case appBuild
     case sdkVersion
-    case sdkBuild
     case manufacturer
     case deviceName
     case deviceModel
@@ -97,7 +94,6 @@ struct Login : Codable {
     self.appVersion = try container.decode(String.self, forKey: .appVersion)
     self.appBuild = try container.decode(String.self, forKey: .appBuild)
     self.sdkVersion = try container.decode(String.self, forKey: .sdkVersion)
-    self.sdkBuild = try container.decode(String.self, forKey: .sdkBuild)
     // self.manufacturer - is initialized with let
     self.deviceName = try container.decode(String.self, forKey: .deviceName)
     self.deviceModel = try container.decode(String.self, forKey: .deviceModel)
@@ -120,8 +116,7 @@ struct Login : Codable {
     try container.encode(appVersion, forKey: .appVersion)
     try container.encode(appBuild, forKey: .appBuild)
     try container.encode(sdkVersion, forKey: .sdkVersion)
-    try container.encode(sdkBuild, forKey: .sdkBuild)
-    
+
     try container.encode(manufacturer, forKey: .manufacturer)
     try container.encode(deviceName, forKey: .deviceName)
     try container.encode(deviceModel, forKey: .deviceModel)
@@ -145,7 +140,6 @@ func ==(lhs: Login, rhs: Login) -> Bool {
     lhs.appVersion == rhs.appVersion &&
     lhs.appBuild == rhs.appBuild &&
     lhs.sdkVersion == rhs.sdkVersion &&
-    lhs.sdkBuild == rhs.sdkBuild &&
     lhs.manufacturer == rhs.manufacturer &&
     lhs.deviceModel == rhs.deviceModel &&
     lhs.deviceName == rhs.deviceName &&

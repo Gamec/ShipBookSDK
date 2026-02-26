@@ -41,7 +41,6 @@ let config = """
 }
 """
 
-let sdkBundle = Bundle(for: SessionManager.self)
 class SessionManager {
   
   private var isInLoginRequest: Bool = false
