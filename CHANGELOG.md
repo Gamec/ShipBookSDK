@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.0.1]
+- Swift 6 compatibility
+
 ## [2.0.0]
 
 ### Added
