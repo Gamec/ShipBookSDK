@@ -5,17 +5,21 @@
 //  Created by Elisha Sterngold on 27/11/2017.
 //  Copyright © 2018 ShipBook Ltd. All rights reserved.
 //
-#if canImport(UIKit)
-import Foundation
-import UIKit
 
+import Foundation
+#if canImport(UIKit)
+import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 class AppEvent: BaseEvent {
   enum State: String, Codable { // need so that the codable will return string
     case active
     case inactive
     case background
-    
+
+#if canImport(UIKit)
     init(state: UIApplication.State) {
       switch state {
       case .active:
@@ -28,8 +32,17 @@ class AppEvent: BaseEvent {
         self = .active
       }
     }
+#endif
+
+#if canImport(AppKit) && !targetEnvironment(macCatalyst) && os(macOS)
+    static func current(app: NSApplication) -> State {
+      if app.isHidden { return .background }
+      if app.isActive { return .active }
+      return .inactive
+    }
+#endif
   }
-  
+
 #if os(iOS)
   enum Orientation: String, Codable { // need so that the codable will return string
     case unknown
@@ -37,7 +50,7 @@ class AppEvent: BaseEvent {
     case portraitUpsideDown
     case landscapeRight
     case landscapeLeft
-    
+
     init(orientation: UIInterfaceOrientation) {
       switch orientation {
       case .unknown:
@@ -55,11 +68,11 @@ class AppEvent: BaseEvent {
       }
     }
   }
-  #endif
+#endif
 
   var event: String
   var state: State
-  
+
 #if os(iOS)
   var orientation: Orientation
   init(event: String, state: UIApplication.State, orientation: UIInterfaceOrientation) {
@@ -68,20 +81,26 @@ class AppEvent: BaseEvent {
     self.orientation = Orientation(orientation: orientation)
     super.init(type: "appEvent")
   }
-#else
-  init(event: String,  state: UIApplication.State) {
+#elseif canImport(UIKit)
+  init(event: String, state: UIApplication.State) {
     self.event = event
     self.state = State(state: state)
     super.init(type: "appEvent")
   }
+#else
+  init(event: String, state: State) {
+    self.event = event
+    self.state = state
+    super.init(type: "appEvent")
+  }
 #endif
-  
+
   enum CodingKeys: String, CodingKey {
     case event
     case state
     case orientation
   }
-  
+
   required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.event = try container.decode(String.self, forKey: .event)
@@ -91,7 +110,7 @@ class AppEvent: BaseEvent {
 #endif
     try super.init(from: decoder)
   }
-  
+
   override func encode(to encoder: Encoder) throws {
     var container = encoder.container(keyedBy: CodingKeys.self)
     try container.encode(event, forKey: .event)
@@ -102,4 +121,3 @@ class AppEvent: BaseEvent {
     try super.encode(to: encoder)
   }
 }
-#endif

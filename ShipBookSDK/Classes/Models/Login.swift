@@ -5,10 +5,7 @@
 //  Created by Elisha Sterngold on 05/11/2017.
 //  Copyright © 2018 ShipBook Ltd. All rights reserved.
 //
-#if canImport(UIKit)
 import Foundation
-import AdSupport
-import UIKit
 
 struct Login : Codable {
   let appId: String
@@ -22,6 +19,14 @@ struct Login : Codable {
   let os: String = "ios"
 #elseif os(tvOS)
   let os: String = "tvos"
+#elseif os(macOS)
+  let os: String = "macos"
+#elseif os(watchOS)
+  let os: String = "watchos"
+#elseif os(visionOS)
+  let os: String = "visionos"
+#else
+  let os: String = "unknown"
 #endif
   let osVersion: String
   let appVersion: String
@@ -38,17 +43,17 @@ struct Login : Codable {
     self.appId = appId
     self.appKey = appKey
     
-    udid = UIDevice.current.identifierForVendor?.uuidString ?? ""
+    udid = DeviceInfo.identifierForVendor
     time = Date()
     deviceTime = time
     bundleIdentifier = Bundle.main.bundleIdentifier ?? ""
     appName = Bundle.main.infoDictionary?[kCFBundleNameKey as String] as? String ?? ""
-    osVersion = UIDevice.current.systemVersion
+    osVersion = DeviceInfo.osVersion
     appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     appBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
     sdkVersion = shipBookSDKVersion
-    deviceName = UIDevice.current.name
-    deviceModel = UIDevice.current.modelName
+    deviceName = DeviceInfo.deviceName
+    deviceModel = DeviceInfo.modelName
     language = "\(Locale.current.languageCode ?? "")-\(Locale.current.regionCode ?? "")"
   #if DEBUG
     isDebug = true
@@ -145,4 +150,3 @@ func ==(lhs: Login, rhs: Login) -> Bool {
     lhs.deviceName == rhs.deviceName &&
     lhs.language == rhs.language
 }
-#endif

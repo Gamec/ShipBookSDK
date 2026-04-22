@@ -8,6 +8,9 @@
 
 import XCTest
 @testable import ShipBookSDK
+#if canImport(UIKit)
+import UIKit
+#endif
 
 
 class CodableTests: XCTestCase {
@@ -133,6 +136,7 @@ class CodableTests: XCTestCase {
     XCTAssertEqual(event, event2!)
   }
 
+#if os(iOS)
   func testAppStateEvent() {
     let jsonEncoder = JSONEncoder()
     let event = AppEvent(event: "event", state: UIApplication.State.active, orientation: UIInterfaceOrientation.landscapeLeft)
@@ -148,6 +152,7 @@ class CodableTests: XCTestCase {
     XCTAssertNoThrow(event2 = try jsonDecoder.decode(AppEvent.self, from: jsonData!))
     XCTAssertEqual(event, event2!)
   }
+#endif
 
   func testLogin() {
     let jsonEncoder = JSONEncoder()

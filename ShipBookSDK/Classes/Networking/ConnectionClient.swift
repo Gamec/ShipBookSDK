@@ -5,7 +5,6 @@
 //  Created by Elisha Sterngold on 26/10/2017.
 //  Copyright © 2018 ShipBook Ltd. All rights reserved.
 //
-#if canImport(UIKit)
 import Foundation
 
 //HTTP Methods
@@ -100,4 +99,3 @@ class ConnectionClient {
     }.resume()
   }
 }
-#endif

@@ -5,7 +5,6 @@
 //  Created by Elisha Sterngold on 26/10/2017.
 //  Copyright © 2018 ShipBook Ltd. All rights reserved.
 //
-#if canImport(UIKit)
 import Foundation
 
 /**
@@ -153,4 +152,3 @@ public class ShipBook: NSObject {
     LogManager.shared.push(log: event)
   }
 }
-#endif

@@ -6,7 +6,11 @@
 //  Copyright © 2018 ShipBook Ltd. All rights reserved.
 //
 
+#if __has_include(<UIKit/UIKit.h>)
 #import <UIKit/UIKit.h>
+#elif __has_include(<AppKit/AppKit.h>)
+#import <AppKit/AppKit.h>
+#endif
 
 //! Project version number for ShipBook.
 FOUNDATION_EXPORT double ShipBookVersionNumber;

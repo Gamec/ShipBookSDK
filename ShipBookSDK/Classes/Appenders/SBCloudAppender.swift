@@ -5,9 +5,12 @@
 //  Created by Elisha Sterngold on 01/11/2017.
 //  Copyright © 2018 ShipBook Ltd. All rights reserved.
 //
-#if canImport(UIKit)
 import Foundation
+#if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 class SBCloudAppender: BaseAppender{
   let name: String
@@ -32,7 +35,9 @@ class SBCloudAppender: BaseAppender{
   private var backgroundObserver: NSObjectProtocol? = nil
   private var connectedObserver: NSObjectProtocol? = nil
   private var userChangeObserver: NSObjectProtocol? = nil
+#if canImport(UIKit) && !os(watchOS)
   private var backgroundTaskID: UIBackgroundTaskIdentifier = .invalid
+#endif
   
   private var uploadingSavedData = false
   var hasLog = false
@@ -59,6 +64,7 @@ class SBCloudAppender: BaseAppender{
     
     update(config: config)
     
+#if canImport(UIKit)
     backgroundObserver = NotificationCenter.default.addObserver(
       forName: UIApplication.didEnterBackgroundNotification,
       object: nil,
@@ -74,10 +80,10 @@ class SBCloudAppender: BaseAppender{
               UIApplication.shared.endBackgroundTask(taskId)
               self?.backgroundTaskID = .invalid
           }
-                
+
           // Send the data synchronously.
           self?.send()
-          
+
           // end task
           guard let taskId = self?.backgroundTaskID else {
               return
@@ -86,6 +92,17 @@ class SBCloudAppender: BaseAppender{
           self?.backgroundTaskID = .invalid
         }
     }
+#elseif canImport(AppKit)
+    backgroundObserver = NotificationCenter.default.addObserver(
+      forName: NSApplication.willResignActiveNotification,
+      object: nil,
+      queue: nil) {[weak self] _ in
+        DispatchQueue.shipBook.async {
+          InnerLog.d("I'm out of focus!")
+          self?.send()
+        }
+    }
+#endif
 
     connectedObserver = NotificationCenter.default.addObserver(
       forName: NotificationName.Connected,
@@ -123,7 +140,9 @@ class SBCloudAppender: BaseAppender{
   }
   
   deinit {
-    NotificationCenter.default.removeObserver(backgroundObserver!)
+    if let backgroundObserver = backgroundObserver {
+      NotificationCenter.default.removeObserver(backgroundObserver)
+    }
     NotificationCenter.default.removeObserver(connectedObserver!)
     NotificationCenter.default.removeObserver(userChangeObserver!)
     InnerLog.d("deinit of CloudAppender")
@@ -434,4 +453,3 @@ class SBCloudAppender: BaseAppender{
     }
   }
 }
-#endif

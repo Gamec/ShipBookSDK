@@ -5,7 +5,6 @@
 //  Created by Elisha Sterngold on 29/10/2017.
 //  Copyright © 2018 ShipBook Ltd. All rights reserved.
 //
-#if canImport(UIKit)
 import Foundation
 
 let config = """
@@ -234,4 +233,3 @@ class SessionManager {
     }
   }
 }
-#endif
